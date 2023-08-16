@@ -27,4 +27,4 @@ jobs:
           git submodule update --remote --recursive
 
       - name: Build and Deploy to server
-        run: docker compose -f deployment/docker-compose.yml up -d --build
+        run: docker compose -f docker-compose.yml up -d --build
