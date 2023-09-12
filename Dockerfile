@@ -6,6 +6,7 @@ WORKDIR /usr/src/app
 # dont buffer to stdout/stderr
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV OPENAI_API_KEY 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
 
 COPY ./requirements.txt /usr/src/app/requirements.txt
 
