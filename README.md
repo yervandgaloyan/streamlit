@@ -1,4 +1,4 @@
-# streamlit-docker-example
+# streamlit-docker
 
 Example on how to run and develop a [streamlit](https://github.com/streamlit/streamlit) application inside docker.
 
