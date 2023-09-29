@@ -10,35 +10,80 @@ openai.api_key = api_key
 
 st.title("Social Media Post Generator")
 
-# Streamlit UI elements for user input
-number_of_posts = st.slider("Number of Posts", min_value=1, max_value=10)
-social_media_channel = st.selectbox("Social Media Channel", ["Facebook", "Twitter", "Instagram"])
-business_name = st.text_input("Business Name")
-business_value = st.text_input("Business Value")
-industry = st.text_input("Industry")
-number = st.slider("Number of Words", min_value=5, max_value=50)
-website_link = st.text_input("Website Link")
-number_of_hashtags = st.slider("Number of Hashtags", min_value=1, max_value=10)
-# hashtags = st.text_area("Enter Relevant Hashtags (comma-separated)")
+post_types = [
+    "Single Image post",
+    "Text Post",
+    "Video post",
+    "Event post",
+    "Articles post",
+    "Polls post",
+    "Carousel post",
+    "Celebrate an occasion post"
+]
+
+
+
+channel = st.multiselect(
+    'Select Social Media Channel',
+    ["Facebook", "Twitter", "Instagram","Linkedin"])
+
+
+
+if 'Linkedin' in channel: # If user selects Email  do 
+    post_types = st.selectbox("Post Type", post_types)
+    
+    if "Polls post" in post_types:
+        poll_topic = st.text_input("Poll Topic")
+        number_of_options = st.slider("Number of Options", min_value=2, max_value=4)
+        business_name = st.text_input("Business Name")
+        business_describtion = st.text_input("Business Description")
+        website_link = st.text_input("Website Link")
+        number_of_posts = st.slider("Number of Posts", min_value=1, max_value=10)
+        call_to_action = st.selectbox("Call to Action", ["commercial", "informational"])
+
+
+
+# Poll Topic - employee onboarding and offboarding Question 
+# character limit - max 140 
+# Options - 4 Options 
+# character limit - max 30
+# Business Name: Raiser 
+# Business Description: HR software that automates HR processes Website
+# URL - raiser.global
+# Number of polls - 3 
+# Call to action - informational
+
+# Poll Topic - [poll topic]
+# Question character limit - max 140-for mher
+# Options - [number]
+# Options character limit - max 30-for mher
+# Business Name: [business name]
+# Business Description: [what does your business do?] - doesn’t make that sense in this case
+# Website URL - [URL]
+# Number of polls - [number]
+# Call to action - [commercial, informational] 
+
+
+
 
 def generate_post():
+
+
     post_parts = []
 
-    if number_of_posts:
-        post_parts.append(f"Generate {number_of_posts} posts for {social_media_channel} that align with our brand's voice and values.")
-    if business_name:
-        post_parts.append(f"{business_name}, specializes in {business_value} within the {industry} section.")
-    if number:
-        post_parts.append(f"Aim for approximately {number} words for each post.")
-    post_parts.append("For each post, ensure the following elements are incorporated:")
-    post_parts.append("Maintain a friendly tone throughout. Avoid jargon and use approachable language.")
-    post_parts.append("Craft an engaging and creative first sentence to captivate readers and convey the main message effectively. ")
-    if business_name:
-        post_parts.append(f" Emphasize the unique features of {business_name}")
-    if website_link:
-        post_parts.append(f"Include a clear commercial call to action leading to our website page: {website_link}.")
-    if number_of_hashtags:
-        post_parts.append(f"Integrate {number_of_hashtags} targeted hashtags relevant to {social_media_channel}")
+
+    post_parts.append(f"Poll Topic - {poll_topic} \n")
+    post_parts.append("Question character limit - max 140-for mher\n")
+    post_parts.append(f"Options - {number_of_options}\n")
+    post_parts.append(f"Options character limit - max 30\n")
+    post_parts.append(f"Business Name - {business_name}\n")
+    post_parts.append(f"Business Description - {business_describtion}\n")
+    post_parts.append(f"Business Description - {business_describtion}\n")
+    post_parts.append(f"Website URL  - {website_link}\n")
+    post_parts.append(f"Number of polls -  {number_of_posts}\n")
+    post_parts.append(f"Call to action - {call_to_action}\n")
+
+
     if post_parts:
         generated_text = "\n\n".join(post_parts)
         st.subheader("Generated Post:")
@@ -52,9 +97,10 @@ def generate_post():
                 max_tokens=500  # Adjust max_tokens as needed
             )
         assistant_reply = response['choices'][0]['message']['content']
-        st.text_area("Assistant:", assistant_reply)
+        st.text_area("Assistant:", assistant_reply,  height=400)
     else:
         st.warning("Please fill in at least one of the input fields to generate a post.")
+
 
 
 if st.button("Generate Post"):
