@@ -11,8 +11,7 @@ openai.api_key = api_key
 st.title("Social Media Post Generator")
 
 post_types = [
-    "Single Image post",
-    "Text Post",
+    "Simple post",
     "Video post",
     "Event post",
     "Articles post",
@@ -40,7 +39,18 @@ if 'Linkedin' in channel: # If user selects Email  do
         website_link = st.text_input("Website Link")
         number_of_posts = st.slider("Number of Posts", min_value=1, max_value=10)
         call_to_action = st.selectbox("Call to Action", ["commercial", "informational"])
-
+    
+    elif "Simple post" in post_types:
+        content_topic = st.text_input("Content Topic")
+        post_topic = st.text_input("Post Topic")
+        number_of_words = st.slider("Number of Words", min_value=15, max_value=100)
+        business_name = st.text_input("Business Name")
+        business_describtion = st.text_input("Business Description")
+        website_link = st.text_input("Website Link")
+        
+        # number_of_posts = st.slider("Number of Posts", min_value=1, max_value=10)
+        call_to_action = st.selectbox("Call to Action", ["commercial", "informational"])
+        notes = st.text_input("Notes (any notes that could be useful)")
 
 
 # Poll Topic - employee onboarding and offboarding Question 
@@ -65,24 +75,38 @@ if 'Linkedin' in channel: # If user selects Email  do
 
 
 
-
 def generate_post():
 
-
     post_parts = []
-
-
-    post_parts.append(f"Poll Topic - {poll_topic} \n")
-    post_parts.append("Question character limit - max 140-for mher\n")
-    post_parts.append(f"Options - {number_of_options}\n")
-    post_parts.append(f"Options character limit - max 30\n")
-    post_parts.append(f"Business Name - {business_name}\n")
-    post_parts.append(f"Business Description - {business_describtion}\n")
-    post_parts.append(f"Business Description - {business_describtion}\n")
-    post_parts.append(f"Website URL  - {website_link}\n")
-    post_parts.append(f"Number of polls -  {number_of_posts}\n")
-    post_parts.append(f"Call to action - {call_to_action}\n")
-
+    if "Polls post" in post_types:
+        post_parts.append(f"Generate poll based on this criteria")
+        post_parts.append(f"Poll Topic - {poll_topic} \n")
+        post_parts.append("Question character limit - max 140\n")
+        post_parts.append(f"Options - {number_of_options}\n")
+        post_parts.append(f"Options character limit - max 30\n")
+        post_parts.append(f"Business Name - {business_name}\n")
+        post_parts.append(f"Business Description - {business_describtion}\n")
+        post_parts.append(f"Website URL  - {website_link}\n")
+        post_parts.append(f"Number of posts -  {number_of_posts}\n")
+        post_parts.append(f"Call to action - {call_to_action}\n")
+        post_parts.append("The structore of generted text something like this ")
+        post_parts.append("Poll topic 1")
+        post_parts.append("Question 1")
+        post_parts.append("Options:")
+        post_parts.append("Poll topic 2")
+        post_parts.append("Question 2")
+        post_parts.append("Options:")
+        post_parts.append("and so on")
+    elif "Simple post" in post_types:
+        post_parts.append(f"Generate post based on this criteria")
+        post_parts.append(f"Post Topic - {post_topic} \n")
+        post_parts.append(f"Content Topic - {content_topic}\n")
+        post_parts.append(f"Business Name - {business_name}\n")
+        post_parts.append(f"Business Description - {business_describtion}\n")
+        post_parts.append(f"Website URL  - {website_link}\n")
+        post_parts.append(f"Word Count   - {number_of_words}\n")
+        post_parts.append(f"Call to action - {call_to_action}\n")
+        post_parts.append(f"Notes - {notes}\n")
 
     if post_parts:
         generated_text = "\n\n".join(post_parts)
@@ -90,7 +114,7 @@ def generate_post():
         st.write(generated_text)
 
         # Use ChatGPT to suggest improvements or continue the text
-        conversation = [{"role": "system", "content": "User"}, {"role": "user", "content": generated_text}]
+        conversation = [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": generated_text}]
         response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=conversation,
